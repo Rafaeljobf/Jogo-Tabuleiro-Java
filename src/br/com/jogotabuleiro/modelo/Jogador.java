@@ -3,6 +3,7 @@ package br.com.jogotabuleiro.modelo;
 public abstract class Jogador {
     private int posicao;
     private String cor;
+    private int qtdJogadas;
 
     public Jogador(String cor){
         this.cor = cor;
@@ -15,6 +16,14 @@ public abstract class Jogador {
 
     public String getCor() {
         return cor;
+    }
+
+    public int getQtdJogadas() {
+        return qtdJogadas;
+    }
+
+    public void incrementarJogadas(){
+        this.qtdJogadas++;
     }
 
     public void mover(int resultadoDados){

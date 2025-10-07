@@ -8,7 +8,8 @@ public class JogadorAzarado extends Jogador {
 
     @Override
     public int[] rolarDados(Dado dado1, Dado dado2) {
-
-        return null;
+        int resultadoDado1 = dado1.rolar();
+        int resultadoDado2 = dado2.rolar();
+        return new int[]{resultadoDado1, resultadoDado2};
     }
 }
