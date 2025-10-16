@@ -58,6 +58,9 @@ public class Jogo {
             this.vencedor = jogadorAtual;
         }
 
+        Casa casaQueParou = this.tabuleiro.getCasa(jogadorAtual.getPosicao());
+        casaQueParou.acao(jogadorAtual);
+
         jogadorAtual.incrementarJogadas();
         return resultadoDados;
     }

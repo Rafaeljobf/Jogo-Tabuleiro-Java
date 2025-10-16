@@ -9,4 +9,6 @@ public interface InterfaceUsuario {
     void exibirMensagem(String mensagem);
 
     void atualizarTela();
+
+    void debugMode();
 }

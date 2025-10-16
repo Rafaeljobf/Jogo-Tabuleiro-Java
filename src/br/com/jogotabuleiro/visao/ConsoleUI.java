@@ -68,6 +68,7 @@ public class ConsoleUI implements InterfaceUsuario{
 
         if (!jogador.podeJogar()){
             exibirMensagem("Jogador " + jogador.getCor() + " está bloqueado e passa a vez.");
+            jogador.desbloquear();
             jogo.passarVez();
             return false;
         }
@@ -163,6 +164,10 @@ public class ConsoleUI implements InterfaceUsuario{
             System.out.println();
         }
         System.out.println("-------------------");
+    }
+
+    public void debugMode(){
+
     }
 
     // estilização da mensagem
