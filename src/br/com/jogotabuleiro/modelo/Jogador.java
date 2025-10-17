@@ -27,6 +27,15 @@ public abstract class Jogador {
         return qtdJogadas;
     }
 
+    // setter para o modo debug
+    public void setPosicao(int novaPosicao) {
+        if (novaPosicao >= 0 && novaPosicao <= 40) {
+            this.posicao = novaPosicao;
+        } else if (novaPosicao > 40) {
+            this.posicao = 40;
+        }
+    }
+
     public void incrementarJogadas(){
         this.qtdJogadas++;
     }
@@ -52,4 +61,9 @@ public abstract class Jogador {
         return !bloqueado;
     }
 
+    public void copiarEstado(Jogador outro) {
+        this.posicao = outro.getPosicao();
+        this.qtdJogadas = outro.getQtdJogadas();
+        this.bloqueado = outro.bloqueado;
+    }
 }

@@ -2,6 +2,7 @@ package br.com.jogotabuleiro.modelo;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.Scanner;
 
 public class Jogo {
@@ -48,21 +49,29 @@ public class Jogo {
         return false;
     }
 
-    public int[] rolarDadosEMover(){
+    public String[] executarTurno() {
         Jogador jogadorAtual = getJogadorAtual();
         int[] resultadoDados = jogadorAtual.rolarDados(dado1, dado2);
         int soma = resultadoDados[0] + resultadoDados[1];
+
+        String msgDados = resultadoDados[0] + "," + resultadoDados[1];
+        String msgSoma = String.valueOf(soma);
+
         jogadorAtual.mover(soma);
 
-        if (jogadorAtual.getPosicao() == 40){
+        String msgAcao = "";
+        if (jogadorAtual.getPosicao() >= 40) {
             this.vencedor = jogadorAtual;
+            // Sinal para a UI de que o jogo acabou nesta jogada
+            msgAcao = "VENCEU";
+        } else {
+            Casa casaQueParou = this.tabuleiro.getCasa(jogadorAtual.getPosicao());
+            msgAcao = casaQueParou.acao(jogadorAtual, this);
         }
 
-        Casa casaQueParou = this.tabuleiro.getCasa(jogadorAtual.getPosicao());
-        casaQueParou.acao(jogadorAtual);
-
         jogadorAtual.incrementarJogadas();
-        return resultadoDados;
+
+        return new String[]{msgDados, msgSoma, msgAcao};
     }
 
     public Jogador getJogadorAtual(){
@@ -91,5 +100,70 @@ public class Jogo {
 
     public List<Jogador> getJogadores(){
         return this.jogadores;
+    }
+
+    public String moverJogadorParaCasa(int numeroCasa) {
+        Jogador jogadorAtual = getJogadorAtual();
+
+        jogadorAtual.setPosicao(numeroCasa);
+        System.out.println("DEBUG: Jogador " + jogadorAtual.getCor() + " movido para a casa " + jogadorAtual.getPosicao());
+
+        String mensagemAcao = "";
+        if (jogadorAtual.getPosicao() >= 40) {
+            this.vencedor = jogadorAtual;
+            mensagemAcao = "VENCEU";
+        } else {
+            Casa casaOndeParou = this.tabuleiro.getCasa(jogadorAtual.getPosicao());
+            mensagemAcao = casaOndeParou.acao(jogadorAtual, this);
+        }
+
+        jogadorAtual.incrementarJogadas();
+
+        return mensagemAcao;
+    }
+
+    public String transformarJogador(Jogador jogador) {
+        int index = jogadores.indexOf(jogador);
+        if (index == -1) return "Erro interno: jogador não encontrado.";
+
+        int tipoAtual = 0;
+        if (jogador instanceof JogadorNormal) tipoAtual = 1;
+        if (jogador instanceof JogadorAzarado) tipoAtual = 2;
+        if (jogador instanceof JogadorSortudo) tipoAtual = 3;
+
+
+        int novoTipo;
+        do {
+            novoTipo = new Random().nextInt(3) + 1; // Sorteia 1, 2 ou 3
+        } while (novoTipo == tipoAtual);
+
+        Jogador novoJogador;
+        String nomeNovoTipo = "";
+        switch (novoTipo) {
+            case 1:
+                novoJogador = new JogadorNormal(jogador.getCor());
+                nomeNovoTipo = "Normal";
+                break;
+            case 2:
+                novoJogador = new JogadorAzarado(jogador.getCor());
+                nomeNovoTipo = "Azarado";
+                break;
+            default: // case 3
+                novoJogador = new JogadorSortudo(jogador.getCor());
+                nomeNovoTipo = "Sortudo";
+                break;
+        }
+
+        novoJogador.copiarEstado(jogador);
+
+        jogadores.set(index, novoJogador);
+
+        return "CASA SURPRESA! Você tirou uma carta e se transformou em um Jogador " + nomeNovoTipo + "!";
+    }
+
+    public void resetarPosicaoJogador(Jogador jogadorAlvo) {
+        if (jogadorAlvo != null) {
+            jogadorAlvo.setPosicao(0);
+        }
     }
 }
