@@ -7,7 +7,9 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class GraficaUI extends JFrame {
 
@@ -130,18 +132,40 @@ public class GraficaUI extends JFrame {
         Jogador jogadorAtual = jogo.getJogadorAtual();
         labelJogadorAtual.setText("Vez de: " + jogadorAtual.getCor() + " | Posição: " + jogadorAtual.getPosicao());
 
-        for(int i=0; i < casasLabels.size(); i++){
-            JLabel casaLabel = casasLabels.get(i);
-            casaLabel.setText("<html>" + (i+1) + "<br/></html>"); // Reseta o texto
-        }
-
+        // Agrupa jogadores por posição para facilitar a renderização
+        Map<Integer, List<Jogador>> jogadoresPorCasa = new HashMap<>();
         for (Jogador p : jogo.getJogadores()) {
             if (p.getPosicao() > 0) {
-                JLabel casaLabel = casasLabels.get(p.getPosicao() - 1);
-                // Adiciona a primeira letra da cor do jogador na casa
-                String textoAtual = casaLabel.getText().replace("</html>", "");
-                casaLabel.setText(textoAtual + " " + p.getCor().charAt(0) + "</html>");
+                // computeIfAbsent garante que a lista seja criada se ainda não existir
+                jogadoresPorCasa.computeIfAbsent(p.getPosicao(), k -> new ArrayList<>()).add(p);
             }
+        }
+
+        // Atualiza cada label do tabuleiro
+        for (int i = 0; i < casasLabels.size(); i++) {
+            int numeroCasa = i + 1;
+            JLabel casaLabel = casasLabels.get(i);
+            // Inicia a construção do conteúdo HTML da casa
+            StringBuilder htmlContent = new StringBuilder("<html><div style='text-align:center;'>" + numeroCasa + "<br/>");
+
+            if (jogadoresPorCasa.containsKey(numeroCasa)) {
+                for (Jogador p : jogadoresPorCasa.get(numeroCasa)) {
+                    String bgColor = getColorHexFromString(p.getCor());
+                    String fontColor = getFontColorForBackground(bgColor);
+
+                    // Adiciona um "token" colorido com a inicial do jogador
+                    htmlContent.append("<span style='background-color:")
+                            .append(bgColor)
+                            .append("; color:")
+                            .append(fontColor)
+                            .append("; font-family:sans-serif; font-weight:bold; border-radius:4px; padding: 1px 3px; border:1px solid black;'>")
+                            .append(p.getCor().charAt(0))
+                            .append("</span> ");
+                }
+            }
+
+            htmlContent.append("</div></html>");
+            casaLabel.setText(htmlContent.toString());
         }
     }
 
@@ -210,5 +234,26 @@ public class GraficaUI extends JFrame {
                     JOptionPane.ERROR_MESSAGE);
             dispose();
         }
+    }
+
+    private String getColorHexFromString(String cor) {
+        switch (cor.toUpperCase()) {
+            case "VERMELHO": return "#DC143C"; // Vermelho mais escuro
+            case "AZUL": return "#1E90FF";     // Azul mais vivo
+            case "VERDE": return "#228B22";    // Verde floresta
+            case "AMARELO": return "#FFD700";  // Amarelo dourado
+            case "ROXO": return "#8A2BE2";      // Roxo azulado
+            case "LARANJA": return "#FF8C00"; // Laranja escuro
+            default: return "#000000";         // Preto como padrão
+        }
+    }
+
+    private String getFontColorForBackground(String hexBgColor) {
+        // Cores claras recebem fonte preta para melhor legibilidade
+        if (hexBgColor.equals("#FFD700") || hexBgColor.equals("#FF8C00")) {
+            return "black";
+        }
+        // Cores escuras recebem fonte branca
+        return "white";
     }
 }

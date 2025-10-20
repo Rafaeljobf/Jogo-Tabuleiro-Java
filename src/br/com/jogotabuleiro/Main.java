@@ -5,7 +5,6 @@ package br.com.jogotabuleiro;
 import br.com.jogotabuleiro.modelo.Jogo;
 import br.com.jogotabuleiro.visao.ConsoleUI;
 import br.com.jogotabuleiro.visao.GraficaUI;
-import javax.swing.SwingUtilities;
 
 import java.util.Scanner;
 
