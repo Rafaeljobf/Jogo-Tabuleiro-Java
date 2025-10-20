@@ -62,7 +62,6 @@ public class Jogo {
         String msgAcao = "";
         if (jogadorAtual.getPosicao() >= 40) {
             this.vencedor = jogadorAtual;
-            // Sinal para a UI de que o jogo acabou nesta jogada
             msgAcao = "VENCEU";
         } else {
             Casa casaQueParou = this.tabuleiro.getCasa(jogadorAtual.getPosicao());

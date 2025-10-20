@@ -24,17 +24,14 @@ public class GraficaUI extends JFrame {
         this.jogo = jogo;
         this.casasLabels = new ArrayList<>();
 
-        // 1. Configuração da Janela Principal
         setTitle("Jogo de Tabuleiro POO");
         setSize(1024, 768);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout(10, 10));
 
-        // 2. Criação dos Componentes
         criarPainelTabuleiro();
         criarPainelControles();
 
-        // Atualiza a tela inicial
         atualizarTela();
     }
 
@@ -54,7 +51,6 @@ public class GraficaUI extends JFrame {
     }
 
     private void criarPainelControles() {
-        // Painel de Log
         areaDeLog = new JTextArea();
         areaDeLog.setEditable(false);
         areaDeLog.setFont(new Font("Monospaced", Font.PLAIN, 14));
@@ -63,7 +59,6 @@ public class GraficaUI extends JFrame {
         add(scrollPane, BorderLayout.EAST);
         adicionarLog("Bem-vindo! Configure os jogadores para começar.");
 
-        // Painel de Ações (Sul)
         JPanel painelSul = new JPanel(new BorderLayout(10, 10));
         labelJogadorAtual = new JLabel(" ", SwingConstants.CENTER);
         labelJogadorAtual.setFont(new Font("Arial", Font.BOLD, 16));
@@ -80,30 +75,24 @@ public class GraficaUI extends JFrame {
     }
 
     private void configurarJogadores() {
-        // Cria uma janela de diálogo para configurar os jogadores
         TelaConfiguracao configDialog = new TelaConfiguracao(this, jogo);
-        configDialog.setVisible(true); // Esta chamada bloqueia até o diálogo ser fechado
+        configDialog.setVisible(true);
 
-        // Após o diálogo fechar, verifica se jogadores foram adicionados
         if (jogo.getJogadores().size() >= 2) {
             adicionarLog("Jogo configurado com " + jogo.getJogadores().size() + " jogadores.");
             adicionarLog("É a vez do jogador " + jogo.getJogadorAtual().getCor() + ". Pode começar!");
             botaoRolarDados.setEnabled(true);
         } else {
-            // Se o usuário fechou a janela ou não adicionou jogadores suficientes,
-            // exibimos uma mensagem clara e desabilitamos o jogo.
             adicionarLog("A configuração foi cancelada ou não há jogadores suficientes (mínimo 2).");
             JOptionPane.showMessageDialog(this,
                     "O jogo não pode iniciar sem pelo menos 2 jogadores.\nO programa será encerrado.",
                     "Configuração Incompleta",
                     JOptionPane.ERROR_MESSAGE);
 
-            // Em vez de System.exit(0), que é abrupto, fechamos a janela principal de forma limpa.
             dispose();
         }
     }
 
-    // CÓDIGO CORRIGIDO para GraficaUI.java
     private void executarTurnoGrafico() {
         if (jogo.existeVencedor()) return;
 
@@ -120,22 +109,17 @@ public class GraficaUI extends JFrame {
 
         adicionarLog("--- Vez do Jogador " + jogadorAtual.getCor() + " ---");
 
-        // 1. Chama o motor do jogo unificado.
         String[] resultadoTurno = jogo.executarTurno();
 
-        // --- AQUI ESTÁ A CORREÇÃO PRINCIPAL ---
-        // 2. Processa o novo formato dos dados.
         String[] dadosArray = resultadoTurno[0].split(","); // Separa "d1,d2"
         int d1 = Integer.parseInt(dadosArray[0]);
         int d2 = Integer.parseInt(dadosArray[1]);
         String soma = resultadoTurno[1];
         String mensagemAcao = resultadoTurno[2];
 
-        // 3. Exibe as informações na tela usando o novo formato.
         adicionarLog("Dados: [" + d1 + ", " + d2 + "] | Soma: " + soma);
         adicionarLog("O jogador " + jogadorAtual.getCor() + " moveu para a casa " + jogadorAtual.getPosicao());
 
-        // 4. Processa a ação da casa.
         if ("ACTION:CHOOSE_PLAYER_TO_RESET".equals(mensagemAcao)) {
             adicionarLog("CASA ESPECIAL! Escolha um jogador para voltar ao início.");
             escolherJogadorParaResetar();
@@ -143,15 +127,12 @@ public class GraficaUI extends JFrame {
             adicionarLog("AÇÃO: " + mensagemAcao);
         }
 
-        // 5. Lógica de dados iguais agora funciona corretamente.
         if (d1 == d2) {
             adicionarLog("DADOS IGUAIS! Jogue novamente!");
-            // Não chamamos jogo.passarVez()
         } else {
             jogo.passarVez();
         }
 
-        // 6. Verifica a condição de vitória.
         if (jogo.existeVencedor() || "VENCEU".equals(mensagemAcao)) {
             Jogador vencedor = jogo.getJogadorAtual();
             adicionarLog("FIM DE JOGO! O vencedor é " + vencedor.getCor() + "!");
@@ -165,11 +146,9 @@ public class GraficaUI extends JFrame {
     private void atualizarTela() {
         if (jogo.getJogadores().isEmpty()) return;
 
-        // Atualiza label do jogador atual
         Jogador jogadorAtual = jogo.getJogadorAtual();
         labelJogadorAtual.setText("Vez de: " + jogadorAtual.getCor() + " | Posição: " + jogadorAtual.getPosicao());
 
-        // Limpa e redesenha os jogadores no tabuleiro
         for(int i=0; i < casasLabels.size(); i++){
             JLabel casaLabel = casasLabels.get(i);
             casaLabel.setText("<html>" + (i+1) + "<br/></html>"); // Reseta o texto
@@ -194,7 +173,6 @@ public class GraficaUI extends JFrame {
         Jogador jogadorAtual = jogo.getJogadorAtual();
         List<Jogador> outrosJogadores = new ArrayList<>();
 
-        // Cria uma lista com todos os jogadores, exceto o jogador atual
         for (Jogador j : jogo.getJogadores()) {
             if (j != jogadorAtual) {
                 outrosJogadores.add(j);
@@ -206,13 +184,11 @@ public class GraficaUI extends JFrame {
             return;
         }
 
-        // Cria um array de opções para o JOptionPane
         String[] opcoes = new String[outrosJogadores.size()];
         for (int i = 0; i < outrosJogadores.size(); i++) {
             opcoes[i] = outrosJogadores.get(i).getCor();
         }
 
-        // Mostra a janela de diálogo para o usuário escolher
         String corEscolhida = (String) JOptionPane.showInputDialog(
                 this,
                 "Escolha um jogador para enviar ao início:",
@@ -223,7 +199,6 @@ public class GraficaUI extends JFrame {
                 opcoes[0]
         );
 
-        // Se o usuário escolheu alguém (não clicou em cancelar)
         if (corEscolhida != null) {
             for (Jogador alvo : outrosJogadores) {
                 if (alvo.getCor().equals(corEscolhida)) {
@@ -237,14 +212,11 @@ public class GraficaUI extends JFrame {
     }
 
     public void iniciarConfiguracao() {
-        // Cria uma janela de diálogo para configurar os jogadores
         TelaConfiguracao configDialog = new TelaConfiguracao(this, jogo);
 
-        // Garante que a janela de configuração apareça no centro da tela
         configDialog.setLocationRelativeTo(null);
-        configDialog.setVisible(true); // Esta chamada bloqueia até o diálogo ser fechado
+        configDialog.setVisible(true);
 
-        // Após o diálogo fechar, verifica se jogadores foram adicionados
         if (jogo.getJogadores().size() >= 2) {
             adicionarLog("Jogo configurado com " + jogo.getJogadores().size() + " jogadores.");
             botaoRolarDados.setEnabled(true);
@@ -255,7 +227,7 @@ public class GraficaUI extends JFrame {
                     "O jogo não pode iniciar sem pelo menos 2 jogadores.\nO programa será encerrado.",
                     "Configuração Incompleta",
                     JOptionPane.ERROR_MESSAGE);
-            dispose(); // Fecha a janela principal
+            dispose();
         }
     }
 }
