@@ -74,25 +74,6 @@ public class GraficaUI extends JFrame {
         botaoRolarDados.addActionListener(e -> executarTurnoGrafico());
     }
 
-    private void configurarJogadores() {
-        TelaConfiguracao configDialog = new TelaConfiguracao(this, jogo);
-        configDialog.setVisible(true);
-
-        if (jogo.getJogadores().size() >= 2) {
-            adicionarLog("Jogo configurado com " + jogo.getJogadores().size() + " jogadores.");
-            adicionarLog("É a vez do jogador " + jogo.getJogadorAtual().getCor() + ". Pode começar!");
-            botaoRolarDados.setEnabled(true);
-        } else {
-            adicionarLog("A configuração foi cancelada ou não há jogadores suficientes (mínimo 2).");
-            JOptionPane.showMessageDialog(this,
-                    "O jogo não pode iniciar sem pelo menos 2 jogadores.\nO programa será encerrado.",
-                    "Configuração Incompleta",
-                    JOptionPane.ERROR_MESSAGE);
-
-            dispose();
-        }
-    }
-
     private void executarTurnoGrafico() {
         if (jogo.existeVencedor()) return;
 
