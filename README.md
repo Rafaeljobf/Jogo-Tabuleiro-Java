@@ -1,61 +1,39 @@
-Jogo de Tabuleiro em Java
-Um jogo de tabuleiro simples desenvolvido em Java. O projeto utiliza conceitos de Programação Orientada a Objetos para criar um jogo de tabuleiro com diferentes tipos de casas e jogadores.
+# Jogo de Tabuleiro em Java
 
-Funcionalidades
-Diferentes Tipos de Jogadores: Os jogadores podem escolher entre três tipos de personagens, cada um com habilidades únicas:
+## Descrição do Projeto
 
-Jogador Normal: Rola os dados normalmente.
+### Visão Geral e Objetivo do Jogo
 
-Jogador Azarado: A soma dos dados rolados nunca será maior que 6.
+* Este projeto é uma simulação de um jogo de tabuleiro para computador, desenvolvido para comportar de 1 a 6 participantes simultaneamente.
+* Cada jogador é identificado por uma cor única e tem sua posição rastreada no tabuleiro.
+* O tabuleiro é composto por 40 casas, e todos os competidores iniciam sua jornada a partir da casa 0.
+* O objetivo principal para vencer o jogo é ser o primeiro competidor a alcançar a casa 40.
 
-Jogador Sortudo: A soma dos dados rolados nunca será menor que 7.
+### Tipos de Jogadores e Regras de Jogada
 
-Casas Especiais: O tabuleiro contém várias casas especiais que afetam a jogabilidade:
+* O jogo é construído sobre os conceitos de herança e polimorfismo, apresentando três tipos distintos de jogadores que o usuário pode escolher.
+* A partida deve ser configurada com pelo menos dois jogadores.
+* Os tipos são:
+    * **Jogador Sortudo**: A soma dos valores rolados nos dados é sempre maior ou igual a 7.
+    * **Jogador Azarado**: A soma dos valores rolados nos dados é sempre menor ou igual a 6.
+    * **Jogador Normal**: Pode obter tanto valores altos como baixos para a soma dos dados, sem restrições.
+* A movimentação a cada rodada é definida pela soma dos valores de dois dados.
+* Uma regra especial estipula que, caso um jogador obtenha dois resultados iguais nos dados, ele ganha o direito de jogar novamente.
 
-Casa Bloqueio: O jogador que parar nesta casa fica bloqueado por uma rodada.
+### Tabuleiro Interativo e Casas Especiais
 
-Casa Sorte: O jogador avança 3 casas extras (a menos que seja um Jogador Azarado).
+* O tabuleiro possui casas com efeitos que alteram a dinâmica da partida:
+    * **Casas 10, 25, 38 (Casa Bloqueio)**: Fazem com que o jogador que parar nelas não jogue na próxima rodada.
+    * **Casas 5, 15, 30 (Casa da Sorte)**: Permitem ao jogador avançar 3 casas extras, desde que ele não seja um **Jogador Azarado**.
+    * **Casas 17, 27 (Casa Escolhe Jogador)**: O jogador pode escolher um adversário para voltar ao início do jogo.
+    * **Casas 20, 35 (Casas Mágicas)**: O jogador troca de lugar com o competidor que está mais atrás no tabuleiro. Caso ele seja o último, nada acontece.
+    * **Casa 13 (Casa Surpresa)**: O jogador tem seu tipo (sortudo, azarado ou normal) alterado aleatoriamente para um tipo diferente do atual.
 
-Casa Surpresa: Transforma o tipo do jogador aleatoriamente.
+### Interface e Recursos Técnicos
 
-Casa Mágica: Troca de posição com o jogador que estiver mais atrás no tabuleiro.
-
-Casa Escolhe Jogador: Permite ao jogador escolher outro para voltar ao início do tabuleiro.
-
-Interfaces de Usuário: O jogo oferece duas opções de interface:
-
-Interface Gráfica (GUI): Uma interface visual desenvolvida com Swing.
-
-Interface de Console: Uma interface baseada em texto para jogar no terminal.
-
-Modo Debug: Um modo de jogo especial no console que permite mover os jogadores para qualquer casa do tabuleiro.
-
-Como Executar
-Pré-requisitos:
-
-JDK (Java Development Kit) instalado.
-
-Compilação:
-
-Navegue até a pasta src do projeto.
-
-Compile os arquivos .java usando o seguinte comando:
-
-javac br/com/jogotabuleiro/*.java br/com/jogotabuleiro/modelo/*.java br/com/jogotabuleiro/visao/*.java
-Execução:
-
-Após a compilação, execute a classe Main com o seguinte comando:
-
-java br.com.jogotabuleiro.Main
-Ao iniciar, o jogo oferecerá as seguintes opções no console:
-
-1) Jogo Normal (Console): Inicia o jogo no modo de texto.
-
-2) Modo DEBUG (Console): Inicia o jogo no modo de depuração.
-
-3) Jogo Gráfico (GUI): Inicia a interface gráfica do jogo.
-
-Tecnologias Utilizadas
-Java: Linguagem de programação principal.
-
-Swing: Para a criação da interface gráfica (GUI).
+* A cada rodada, a interface do jogo exibe a posição atual de todos os jogadores no tabuleiro e indica de quem é a vez de jogar.
+* O jogo oferece múltiplas formas de interação:
+    * **Interface Gráfica (GUI)**: Uma interface visual e amigável criada com Java Swing.
+    * **Interface de Console**: Permite jogar diretamente pelo terminal.
+* Ao final da partida, o sistema declara o vencedor e apresenta um pódio com a posição final e a quantidade total de jogadas de cada competidor.
+* O projeto inclui um **Modo Debug** via console, um recurso que permite ao usuário, em vez de rolar os dados, inserir manualmente o número da casa para a qual o jogador deverá se mover, facilitando a realização de testes.
