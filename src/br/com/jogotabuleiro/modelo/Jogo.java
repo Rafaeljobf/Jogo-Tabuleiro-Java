@@ -14,7 +14,7 @@ public class Jogo {
     private Jogador vencedor;
 
     public Jogo(){
-        this.tabuleiro = new Tabuleiro();
+        this.tabuleiro = Tabuleiro.getInstancia();
         this.dado1 = new Dado();
         this.dado2 = new Dado();
         this.jogadores = new ArrayList<>();

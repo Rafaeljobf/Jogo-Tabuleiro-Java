@@ -6,10 +6,18 @@ import java.util.List;
 public class Tabuleiro {
     private List<Casa> casasTabuleiro;
     private final int QTD_CASAS = 41;
+    private static Tabuleiro instanciaUnica;
 
-    public Tabuleiro() {
+    private Tabuleiro() {
         this.casasTabuleiro = new ArrayList<>(QTD_CASAS);
         inicializarTabuleiro();
+    }
+
+    public static synchronized Tabuleiro getInstancia() {
+        if (instanciaUnica == null) {
+            instanciaUnica = new Tabuleiro();
+        }
+        return instanciaUnica;
     }
 
     public void inicializarTabuleiro() {
