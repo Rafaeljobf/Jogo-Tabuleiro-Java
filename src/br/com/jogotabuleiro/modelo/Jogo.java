@@ -22,18 +22,9 @@ public class Jogo {
         this.vencedor = null;
     }
 
-    public void adicionarJogador(String cor, int tipo){
-        switch (tipo){
-            case 1:
-                jogadores.add(new JogadorNormal(cor.toUpperCase()));
-                break;
-            case 2:
-                jogadores.add(new JogadorAzarado(cor.toUpperCase()));
-                break;
-            case 3:
-                jogadores.add(new JogadorSortudo(cor.toUpperCase()));
-                break;
-        }
+    public void adicionarJogador(String tipo, String cor){
+        Jogador novoJogador = JogadorFactory.criarJogador(tipo, cor.toUpperCase());
+        jogadores.add(novoJogador);
     }
 
     public void passarVez(){

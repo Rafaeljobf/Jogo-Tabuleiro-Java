@@ -5,11 +5,11 @@ import java.util.List;
 
 public class Tabuleiro {
     private List<Casa> casasTabuleiro;
-    private final int QTD_CASAS = 41;
+    private int qtdCasas = 41;
     private static Tabuleiro instanciaUnica;
 
     private Tabuleiro() {
-        this.casasTabuleiro = new ArrayList<>(QTD_CASAS);
+        this.casasTabuleiro = new ArrayList<>(qtdCasas);
         inicializarTabuleiro();
     }
 
@@ -20,14 +20,19 @@ public class Tabuleiro {
         return instanciaUnica;
     }
 
+    public void configurarTamanho(int novoTamanho) {
+        if (novoTamanho < 20) novoTamanho = 20; // Tamanho mínimo de segurança
+        this.qtdCasas = novoTamanho + 1;
+
+        inicializarTabuleiro();
+    }
+
     public void inicializarTabuleiro() {
-        for (int i = 0; i < QTD_CASAS; i++) {
-            casasTabuleiro.add(new CasaNormal());
+        for (int i = 0; i < qtdCasas; i++) {
+            casasTabuleiro.add(CasaFactory.criarCasa("Normal"));
         }
 
-        // Substitui todas as casas normais pelas casas especiais nas posições especificadas no trabalho
 
-        // Casa Bloqueio
         casasTabuleiro.set(10, new CasaBloqueio());
         casasTabuleiro.set(25, new CasaBloqueio());
         casasTabuleiro.set(38, new CasaBloqueio());
@@ -50,10 +55,10 @@ public class Tabuleiro {
     }
 
     public Casa getCasa(int posicao) {
-        if (posicao >= 0 && posicao < QTD_CASAS) {
+        if (posicao >= 0 && posicao < qtdCasas) {
             return casasTabuleiro.get(posicao);
         }
-        return casasTabuleiro.get(QTD_CASAS - 1);
+        return casasTabuleiro.get(qtdCasas - 1);
     }
 
     public int getTamanho() {

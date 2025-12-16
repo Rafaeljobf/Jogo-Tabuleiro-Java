@@ -42,9 +42,22 @@ public class ConsoleUI implements InterfaceUsuario {
             exibirMensagem("2) Jogador Azarado");
             exibirMensagem("3) Jogador Sortudo");
 
-            int tipoJogador = lerEntradaInteira("Opção:", 1, 3);
+            int opcaoTipo = lerEntradaInteira("Opção:", 1, 3);
 
-            jogo.adicionarJogador(corJogador, tipoJogador);
+            String tipoString = "";
+            switch(opcaoTipo) {
+                case 1:
+                    tipoString = "Normal";
+                    break;
+                case 2:
+                    tipoString = "Azarado";
+                    break;
+                case 3:
+                    tipoString = "Sortudo";
+                    break;
+            }
+
+            jogo.adicionarJogador(tipoString, corJogador);
             exibirMensagem("");
         }
         return true;
@@ -190,7 +203,6 @@ public class ConsoleUI implements InterfaceUsuario {
         exibirMensagem("O jogador " + alvo.getCor() + " foi enviado de volta para o início!");
     }
 
-    // Novo método auxiliar para evitar try-catch repetido e validação
     private int lerEntradaInteira(String mensagem, int min, int max) {
         while (true) {
             exibirMensagem(mensagem);

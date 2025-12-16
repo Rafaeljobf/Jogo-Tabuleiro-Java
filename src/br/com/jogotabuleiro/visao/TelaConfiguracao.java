@@ -66,8 +66,8 @@ public class TelaConfiguracao extends JDialog {
             return;
         }
 
-        int tipo = comboTipoJogador.getSelectedIndex() + 1;
-        jogo.adicionarJogador(cor, tipo);
+        String tipo = (String) comboTipoJogador.getSelectedItem();
+        jogo.adicionarJogador(tipo, cor);
 
         listModel.addElement(cor + " (" + comboTipoJogador.getSelectedItem() + ")");
         coresModel.removeElement(cor);
